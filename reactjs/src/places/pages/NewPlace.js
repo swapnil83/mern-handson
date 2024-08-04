@@ -9,6 +9,7 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import './PlaceForm.css';
 
 const NewPlace = () => {
@@ -24,6 +25,10 @@ const NewPlace = () => {
         address: {
             value: '',
             isValid: false
+        },
+        image: {
+            value: null,
+            isValid: false
         }
     }, false);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -33,22 +38,17 @@ const NewPlace = () => {
     const placeSubmitHandler = async (event) => {
         event.preventDefault();
         try {
+            const formData = new FormData();
+            formData.append('title', formState.inputs.title.value);
+            formData.append('description', formState.inputs.description.value);
+            formData.append('address', formState.inputs.address.value);
+            formData.append('creator', appContext.userId);
+            formData.append('image', formState.inputs.image.value);
+
             await sendRequest(
                 'http://localhost:5000/api/places',
                 'POST',
-                JSON.stringify({
-                    title: formState.inputs.title.value,
-                    description: formState.inputs.description.value,
-                    address: formState.inputs.address.value,
-                    coordinates: {
-                        "lat": 40.7484405,
-                        "lng": -73.9878584
-                    },
-                    creator: appContext.userId
-                }),
-                {
-                    'Content-Type': 'application/json'
-                }
+                formData
             );
             history.push('/');
         } catch (err) { }
@@ -83,6 +83,11 @@ const NewPlace = () => {
                     validators={[VALIDATOR_REQUIRE()]}
                     errorText='Please enter a valid address.'
                     onInput={inputHandler}
+                />
+                <ImageUpload
+                    id='image'
+                    onInput={inputHandler}
+                    errorText='Please provide an image.'
                 />
                 <Button type='submit' disabled={!formState.isValid}>ADD PLACE</Button>
             </form>

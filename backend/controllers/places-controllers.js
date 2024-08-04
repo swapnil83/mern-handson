@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 
@@ -62,13 +64,16 @@ const createPlace = async (req, res, next) => {
         return next(new HttpError('Invalid inputs passed, please check your data.', 422));
     }
 
-    const { title, description, coordinates, address, creator } = req.body;
+    const { title, description, coordinates = {
+        lat: 40.7484405,
+        lng: -73.9878584
+    }, address, creator } = req.body;
     const createdPlace = new Place({
         title,
         description,
         address,
         location: coordinates,
-        image: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fplace%2F&psig=AOvVaw3PcjhPepzbd4HPiCHKozWG&ust=1722012830598000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCODzq-_TwocDFQAAAAAdAAAAABAE',
+        image: req.file.path,
         creator
     });
 
@@ -176,6 +181,8 @@ const deletePlace = async (req, res, next) => {
         )
     }
 
+    const imagePath = place.image;
+
     try {
         const sess = await mongoose.startSession();
         sess.startTransaction();
@@ -192,6 +199,9 @@ const deletePlace = async (req, res, next) => {
         return next(error);
     };
 
+    fs.unlink(imagePath, err => {
+        console.log(err);
+    });
     res.status(200).json({ message: 'Place deleted.' })
 };
 
