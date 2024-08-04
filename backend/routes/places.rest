@@ -1,0 +1,67 @@
+###
+
+GET http://localhost:5000/api/places/66a289cfb6924bc6971d44f2
+
+###
+
+GET http://localhost:5000/api/places/p2
+
+###
+
+GET http://localhost:5000/api/places/user/66a4bd32e0c9866d3c0ec92b
+
+###
+
+GET http://localhost:5000/api/places/user/u2
+
+###
+
+GET http://localhost:5000/places/user
+
+###
+
+POST http://localhost:5000/api/places HTTP/1.1
+content-type: application/json
+
+{
+    "title": "White House",
+    "description": "Danger Place!",
+    "address": "Burmuda Triangle, Florida",
+    "coordinates": {
+        "lat": 40.7484405,
+        "lng": -73.9878584
+    },
+    "creator": "66a4bd32e0c9866d3c0ec92b"
+}
+
+###
+
+POST http://localhost:5000/api/places HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Galaxy Mansion",
+    "description": "Residential Appartment",
+    "address": "Saint Lucia, Texas",
+    "coordinates": {
+        "lat": 45.7484405,
+        "lng": -79.9878584
+    },
+    "creator": "66a4bd32e0c9866d3c0ec92b"
+}
+
+###
+
+PATCH http://localhost:5000/api/places/66a289cfb6924bc6971d44f2 HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Bermunda Triangle",
+    "description": "Danger Place!"
+}
+
+###
+
+DELETE http://localhost:5000/api/places/66a4bda0e0c9866d3c0ec92f HTTP/1.1
+
+###

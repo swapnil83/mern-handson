@@ -1,0 +1,30 @@
+###
+
+GET http://localhost:5000/api/users HTTP/1.1
+
+###
+
+POST http://localhost:5000/api/users/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "maxi@gmail.com",
+    "password": "test@123"
+}
+
+###
+
+POST http://localhost:5000/api/users/signup HTTP/1.1
+content-type: application/json
+
+{
+    "name": "David",
+    "email": "warner@gmail.com",
+    "password": "test@1234"
+}
+
+# {
+#     "name": "Maxwell",
+#     "email": "maxi@gmail.com",
+#     "password": "test@123"
+# }
