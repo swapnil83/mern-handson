@@ -67,19 +67,19 @@ const createPlace = async (req, res, next) => {
     const { title, description, coordinates = {
         lat: 40.7484405,
         lng: -73.9878584
-    }, address, creator } = req.body;
+    }, address } = req.body;
     const createdPlace = new Place({
         title,
         description,
         address,
         location: coordinates,
         image: req.file.path,
-        creator
+        creator: req.userData.userId
     });
 
     let user;
     try {
-        user = await User.findById(creator);
+        user = await User.findById(req.userData.userId);
     } catch (err) {
         return next(
             new HttpError(
