@@ -17,8 +17,8 @@ This is a responsive MERN Stack application with the following functionalities:
 1. Comprehensive error handling across all scenarios.
 
 npm Packages Used:
-**Frontend**: react, react-dom, react-router-dom, react-transition-group
-**Backend**: bcryptjs, body-parser, express, express-validator, jsonwebtoken, mongoose, mongoose-unique-validator, multer, uuid
+1. **Frontend**: react, react-dom, react-router-dom, react-transition-group
+2. **Backend**: bcryptjs, body-parser, express, express-validator, jsonwebtoken, mongoose, mongoose-unique-validator, multer, uuid
 
 ![home_page](https://github.com/user-attachments/assets/91a7e861-acc0-4947-95dc-2c8521c8228a)
 ![login_page](https://github.com/user-attachments/assets/b36dd69a-ebaf-46c8-8350-f25d57118846)
