@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 import Users from "./user/pages/Users";
@@ -10,21 +10,33 @@ import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [ userId, setUserId ] = useState(null);
-    
-    const login = useCallback((uid) => {
-        setIsLoggedIn(true);
+    const [token, setToken] = useState(null);
+    const [userId, setUserId] = useState(null);
+
+    const login = useCallback((uid, token) => {
+        setToken(token);
+        localStorage.setItem('userData', JSON.stringify({
+            userId: uid,
+            token: token
+        }));
         setUserId(uid);
     }, []);
 
     const logout = useCallback(() => {
-        setIsLoggedIn(false);
+        setToken(null);
         setUserId(null);
+        localStorage.removeItem('userData');
     }, []);
 
+    useEffect(() => {
+        const storedData = JSON.parse(localStorage.getItem('userData'));
+        if(storedData && storedData.token) {
+            login(storedData.userId, storedData.token);
+        }
+    }, [ login ]);
+
     let routes;
-    if (isLoggedIn) {
+    if (token) {
         routes = (
             <Switch>
                 <Route path='/' exact>
@@ -48,9 +60,6 @@ function App() {
                 <Route path='/' exact>
                     <Users />
                 </Route>
-                {/* <Route path='/:userId/places' exact>
-                    <UserPlaces />
-                </Route> */}
                 <Route path='/auth'>
                     <Auth />
                 </Route>
@@ -60,7 +69,15 @@ function App() {
     }
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn: isLoggedIn, userId: userId, login: login, logout: logout }}>
+        <AuthContext.Provider 
+            value={{ 
+                isLoggedIn: !!token, 
+                token: token, 
+                userId: userId, 
+                login: login, 
+                logout: logout 
+            }}
+        >
             <Router>
                 <MainNavigation />
                 <main>{routes}</main>
