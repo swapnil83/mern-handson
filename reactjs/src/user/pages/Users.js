@@ -15,7 +15,7 @@ const Users = () => {
 
     const fetchData = async () => {
         try {
-            const responseData = await sendRequest('http://localhost:5000/api/users');
+            const responseData = await sendRequest(process.env.REACT_APP_BACKEND_URL + '/users');
             setUsersList(responseData.users);
         } catch (err) {}
     };
